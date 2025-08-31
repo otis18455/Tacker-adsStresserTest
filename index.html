@@ -1,257 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Brave Shields Stress Test</title>
-  <style>
-    :root{
-      --bg:#0b1020;--card:#121a35;--muted:#9fb3ff;--txt:#e8edff;--accent:#6ea8ff;--accent2:#67e8f9;--danger:#ff6b6b;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;background:radial-gradient(1200px 800px at 20% -10%, #192a56 0%, transparent 40%),
-                 radial-gradient(1000px 700px at 120% 10%, #0ea5e9 0%, transparent 40%),
-                 var(--bg);
-         color:var(--txt);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
-    .wrap{max-width:980px;margin:40px auto;padding:24px}
-    .card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.12);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.35);backdrop-filter: blur(8px);}
-    .pad{padding:22px}
-    h1{margin:0 0 4px 0;font-size:28px}
-    h2{margin:0 0 12px 0;font-size:18px;color:var(--muted);font-weight:600}
-    p{color:#cfe0ff}
-    .grid{display:grid;gap:16px}
-    .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
-    @media (max-width:720px){.g2{grid-template-columns:1fr}}
-    .btn{appearance:none;border:1px solid transparent;background:linear-gradient(180deg, var(--accent), #3b82f6);color:#061229;font-weight:700;padding:12px 16px;border-radius:12px;cursor:pointer;transition:transform .08s ease, box-shadow .2s ease}
-    .btn:hover{transform:translateY(-1px)}
-    .btn:disabled{opacity:.5;cursor:not-allowed}
-    .btn.ghost{background:transparent;color:var(--txt);border-color:rgba(255,255,255,.2)}
-    .btn.danger{background:linear-gradient(180deg, var(--danger), #ef4444);color:white}
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .pill{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:10px 12px;border-radius:999px}
-    .stat{display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12)}
-    .stat b{font-size:22px}
-    code,kbd{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.2);padding:2px 6px;border-radius:6px}
-    .log{height:220px;overflow:auto;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;font-size:12px;line-height:1.35}
-    .small{opacity:.8;font-size:12px}
-    .switch{position:relative;display:inline-flex;align-items:center;gap:8px}
-    .switch input{appearance:none;width:42px;height:24px;border-radius:999px;background:#334155;outline:none;position:relative;cursor:pointer;transition:background .2s}
-    .switch input:checked{background:#22c55e}
-    .switch input::after{content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:white;top:3px;left:3px;transition:left .2s}
-    .switch input:checked::after{left:21px}
-    .sp{height:8px}
-    .range{accent-color:#60a5fa}
-    .kbd{opacity:.8}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brave Shields Stress Test</title>
+<style>
+:root{
+  --bg:#0b1020;--card:#121a35;--muted:#9fb3ff;--txt:#e8edff;
+  --accent:#6ea8ff;--accent2:#67e8f9;--danger:#ff6b6b;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:radial-gradient(1200px 800px at 20% -10%, #192a56 0%, transparent 40%),
+             radial-gradient(1000px 700px at 120% 10%, #0ea5e9 0%, transparent 40%),
+             var(--bg);
+     color:var(--txt);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+.wrap{max-width:980px;margin:40px auto;padding:24px}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.12);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.35);
+      backdrop-filter: blur(8px);}
+.pad{padding:22px}
+h1{margin:0 0 4px 0;font-size:28px}
+h2{margin:0 0 12px 0;font-size:18px;color:var(--muted);font-weight:600}
+p{color:#cfe0ff}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:720px){.g2{grid-template-columns:1fr}}
+.btn{appearance:none;border:1px solid transparent;background:linear-gradient(180deg, var(--accent), #3b82f6);
+     color:#061229;font-weight:700;padding:12px 16px;border-radius:12px;cursor:pointer;
+     transition:transform .08s ease, box-shadow .2s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--txt);border-color:rgba(255,255,255,.2)}
+.btn.danger{background:linear-gradient(180deg, var(--danger), #ef4444);color:white}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pill{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:10px 12px;border-radius:999px}
+.stat{display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12)}
+.stat b{font-size:22px}
+code,kbd{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.2);padding:2px 6px;border-radius:6px}
+.log{height:220px;overflow:auto;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;font-size:12px;line-height:1.35}
+.small{opacity:.8;font-size:12px}
+.switch{position:relative;display:inline-flex;align-items:center;gap:8px}
+.switch input{appearance:none;width:42px;height:24px;border-radius:999px;background:#334155;outline:none;position:relative;cursor:pointer;transition:background .2s}
+.switch input:checked{background:#22c55e}
+.switch input::after{content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:white;top:3px;left:3px;transition:left .2s}
+.switch input:checked::after{left:21px}
+.sp{height:8px}
+.range{accent-color:#60a5fa}
+.kbd{opacity:.8}
+.progress {width:100%;height:10px;background:rgba(255,255,255,.05);border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.06)}
+.progress > i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+#oneShotOptions{display:none;position:absolute;top:100%;left:0;background:var(--card);border:1px solid rgba(255,255,255,.12);
+  border-radius:12px;margin-top:4px;z-index:10;overflow:hidden;max-height:200px;overflow-y:auto}
+#oneShotOptions div{padding:6px 12px;cursor:pointer}
+#oneShotOptions div:hover{background:rgba(255,255,255,.1)}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card pad">
-      <h1>Brave Shields Stress Test</h1>
-      <h2>Generate lots of real tracker/ad requests so Brave blocks them and your counter climbs.</h2>
-      <p>Click <b>Start Test</b> to spawn many requests to well‑known ad & tracker endpoints (via <code>&lt;img&gt;</code>, <code>&lt;script&gt;</code>, and <code>&lt;iframe&gt;</code> beacons). Brave should block most of them, incrementing the built‑in stats. Nothing here executes site code if Shields are working — requests are attempted but blocked.</p>
+<div class="wrap">
+  <div class="card pad">
+    <h1>Brave Shields Stress Test</h1>
+    <h2>Generate lots of real tracker/ad requests so Brave blocks them and your counter climbs.</h2>
+    <p>Click <b>Start Test</b> to spawn many requests to well-known ad & tracker endpoints...</p>
 
-      <div class="grid g2" style="margin-top:14px">
-        <div class="stat"><span class="small">Attempted Requests</span><b id="attempted">0</b></div>
-        <div class="stat"><span class="small">Blocked (estimated)</span><b id="blocked">0</b></div>
-      </div>
-
-      <div class="sp"></div>
-      <div class="row">
-        <button id="start" class="btn">▶ Start Test</button>
-        <button id="stop" class="btn danger" disabled>■ Stop</button>
-        <button id="clear" class="btn ghost">⟲ Clear Log</button>
-        <span class="pill">Burst size: <b id="burstVal">25</b></span>
-        <input id="burst" class="range" type="range" min="5" max="100" value="25"/>
-        <span class="pill">Repeat per endpoint: <b id="multVal">3×</b></span>
-        <input id="mult" class="range" type="range" min="1" max="10" value="3"/>
-        <label class="switch pill"><input id="iframes" type="checkbox" checked /><span>Also use iframes</span></label>
-      </div>
-
-      <div class="sp"></div>
-      <div class="log" id="log"></div>
-      <p class="small">Tip: open <kbd>brave://settings/privacy</kbd> ➜ <b>Brave Shields & privacy</b> to see your global stats, or click the Brave lion icon on this page to view per‑site blocked items.</p>
+    <div class="grid g2" style="margin-top:14px">
+      <div class="stat"><span class="small">Attempted Requests</span><b id="attempted">0</b></div>
+      <div class="stat"><span class="small">Blocked (estimated)</span><b id="blocked">0</b></div>
     </div>
 
-    <div class="card pad" style="margin-top:18px">
-      <h2>What this page does (and doesn't)</h2>
-      <ul>
-        <li>Attempts network requests to popular ad/analytics/tracker endpoints with cache‑busting query strings.</li>
-        <li>Uses <code>Image</code> beacons, injected <code>&lt;script&gt;</code> tags, and optional tiny <code>&lt;iframe&gt;</code>s.</li>
-        <li>Requests are <em>expected</em> to be blocked by Brave; blocked ≠ executed.</li>
-        <li>Be kind: bursts are throttled (~40–60/ms). Don’t leave it running forever.</li>
-      </ul>
-      <p class="small">Note: Endpoints may change over time; some may 404 — that still counts as an attempted request for Shields.</p>
+    <div class="sp"></div>
+    <div class="row">
+      <button id="start" class="btn">▶ Start Test</button>
+      <button id="stop" class="btn danger" disabled>■ Stop</button>
+      <button id="clear" class="btn ghost">⟲ Clear Log</button>
+      <span class="pill">Burst size: <b id="burstVal">25</b></span>
+      <input id="burst" class="range" type="range" min="5" max="100" value="25"/>
+      <span class="pill">Repeat per endpoint: <b id="multVal">3×</b></span>
+      <input id="mult" class="range" type="range" min="1" max="10" value="3"/>
+      <label class="switch pill"><input id="iframes" type="checkbox" checked /><span>Also use iframes</span></label>
     </div>
+
+    <div class="sp"></div>
+
+    <!-- One-shot controls -->
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px;position:relative; z-index:20;">
+      <div style="position:relative;">
+        <div id="oneShotList" class="btn">1k ▼</div>
+        <div id="oneShotOptions">
+          <div data-val="1000">1k</div>
+          <div data-val="2000">2k</div>
+          <div data-val="5000">5k</div>
+          <div data-val="10000">10k</div>
+          <div data-val="50000">50k</div>
+          <div data-val="100000">100k</div>
+          <div data-val="250000">250k</div>
+          <div data-val="500000">500k</div>
+          <div data-val="1000000">1M</div>
+        </div>
+      </div>
+      <button id="oneShotBtn" class="btn">Send One-shot</button>
+      <button id="oneShotStopBtn" class="btn danger" disabled>■ Stop One-shot</button>
+      <div style="flex:1">
+        <div class="progress" title="progress"><i id="oneShotBar"></i></div>
+        <div class="small" id="oneShotStatus" style="margin-top:6px">Idle</div>
+      </div>
+    </div>
+
+    <div class="log" id="log"></div>
+    <p class="small">Tip: open <kbd>brave://settings/privacy</kbd>...</p>
   </div>
 
-  <script>
-    const endpoints = [
-      // Google / DoubleClick / AdSense
-      'https://www.google-analytics.com/collect',
-      'https://www.google-analytics.com/j/collect',
-      'https://stats.g.doubleclick.net/r/collect',
-      'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
-      'https://securepubads.g.doubleclick.net/tag/js/gpt.js',
-      'https://ad.doubleclick.net/ddm/trackimp',
-      'https://adservice.google.com/adsid/integrator.js',
-      'https://www.googletagmanager.com/gtm.js',
+  <div class="card pad" style="margin-top:18px">
+    <h2>What this page does (and doesn't)</h2>
+    <ul>
+      <li>Attempts network requests to popular ad/analytics/tracker endpoints with cache-busting query strings.</li>
+      <li>Uses <code>Image</code> beacons, injected <code>&lt;script&gt;</code> tags, and optional tiny <code>&lt;iframe&gt;</code>s.</li>
+      <li>Requests are <em>expected</em> to be blocked by Brave; blocked ≠ executed.</li>
+      <li>Be kind: bursts are throttled (~40–60/ms). Don’t leave it running forever.</li>
+    </ul>
+    <p class="small">Note: Endpoints may change over time; some may 404 — that still counts as an attempted request for Shields.</p>
+  </div>
+</div>
 
-      // Meta / Facebook
-      'https://connect.facebook.net/en_US/fbevents.js',
-      'https://www.facebook.com/tr',
+<script>
+const endpoints=[/* your endpoints array here */];
 
-      // Microsoft / Bing
-      'https://bat.bing.com/bat.js',
+// UI elements
+const logEl = document.getElementById('log');
+const attemptedEl = document.getElementById('attempted');
+const blockedEl = document.getElementById('blocked');
+const startBtn = document.getElementById('start');
+const stopBtn = document.getElementById('stop');
+const clearBtn = document.getElementById('clear');
+const burst = document.getElementById('burst');
+const burstVal = document.getElementById('burstVal');
+const mult = document.getElementById('mult');
+const multVal = document.getElementById('multVal');
+const iframesToggle = document.getElementById('iframes');
 
-      // Taboola / Outbrain
-      'https://cdn.taboola.com/libtrc/unip/12345/tfa.js',
-      'https://tr.outbrain.com/track',
+const oneShotList=document.getElementById('oneShotList');
+const oneShotOptions=document.getElementById('oneShotOptions');
+const oneShotBtn=document.getElementById('oneShotBtn');
+const oneShotStopBtn=document.getElementById('oneShotStopBtn');
+const oneShotBar=document.getElementById('oneShotBar');
+const oneShotStatus=document.getElementById('oneShotStatus');
 
-      // Quantcast / ScorecardResearch / Comscore
-      'https://pixel.quantserve.com/pixel',
-      'https://sb.scorecardresearch.com/p',
+let timer=null;
+let attempted=0;
+let blockedEstimate=0;
 
-      // Criteo / AdRoll / AppNexus / Rubicon / LiveRamp
-      'https://static.criteo.net/js/ld/ld.js',
-      'https://d.adroll.com/pixel',
-      'https://ib.adnxs.com/seg',
-      'https://pixel.rubiconproject.com/tap.php',
-      'https://idsync.rlcdn.com/idsync',
+burst.addEventListener('input',()=>{burstVal.textContent=burst.value});
+mult.addEventListener('input',()=>{multVal.textContent=mult.value+'×'});
 
-      // Oracle / Adobe / BlueKai / Demdex
-      'https://stags.bluekai.com/site/123?id=1',
-      'https://cm.g.doubleclick.net/pixel', // common sync
-      'https://dpm.demdex.net/id',
+function log(line){
+  const t=new Date().toLocaleTimeString();
+  logEl.textContent+=`[${t}] ${line}\n`;
+  logEl.scrollTop=logEl.scrollHeight;
+}
 
-      // Segment / HubSpot / Hotjar / Optimizely / LinkedIn
-      'https://api.segment.io/v1/p',
-      'https://js.hs-analytics.net/analytics.js',
-      'https://static.hotjar.com/c/hotjar-000000.js',
-      'https://cdn.optimizely.com/js/123456789.js',
-      'https://px.ads.linkedin.com/collect',
+function cacheBust(url){
+  try{const u=new URL(url); u.searchParams.set('cb',Math.random().toString(36).slice(2)); u.searchParams.set('t',Date.now()); return u.toString();}
+  catch(e){return url+'?cb='+Math.random().toString(36).slice(2)+'&t='+Date.now();}
+}
 
-      // Krux / Lotame / Cloudflare beacon
-      'https://beacon.krxd.net/pixel.gif',
-      'https://bcp.crwdcntrl.net/5/c=1/pe=y',
-      'https://static.cloudflareinsights.com/beacon.min.js'
-    ];
+function addImageBeacon(url){
+  const img=new Image();
+  img.referrerPolicy='no-referrer';
+  img.decoding='async';
+  img.loading='eager';
+  img.onerror=()=>{ blockedEstimate++; updateStats(); };
+  img.onload=()=>{ updateStats(); };
+  img.src=cacheBust(url);
+}
 
-    // UI elements
-    const logEl = document.getElementById('log');
-    const attemptedEl = document.getElementById('attempted');
-    const blockedEl = document.getElementById('blocked');
-    const startBtn = document.getElementById('start');
-    const stopBtn = document.getElementById('stop');
-    const clearBtn = document.getElementById('clear');
-    const burst = document.getElementById('burst');
-    const burstVal = document.getElementById('burstVal');
-    const mult = document.getElementById('mult');
-    const multVal = document.getElementById('multVal');
-    const iframesToggle = document.getElementById('iframes');
+function addScriptTag(url){
+  const s=document.createElement('script');
+  s.async=true;s.defer=true;s.src=cacheBust(url);
+  s.onerror=()=>{ blockedEstimate++; updateStats(); };
+  document.body.appendChild(s);
+  setTimeout(()=>{ try{ document.body.removeChild(s);}catch(e){} },5000);
+}
 
-    burst.addEventListener('input',()=>{burstVal.textContent = burst.value});
-    mult.addEventListener('input',()=>{multVal.textContent = mult.value + '×'});
+function addTinyIframe(url){
+  const f=document.createElement('iframe');
+  f.width=1; f.height=1; f.style.position='absolute'; f.style.left='-9999px'; f.style.top='-9999px';
+  f.referrerPolicy='no-referrer';
+  f.src=cacheBust(url);
+  f.onerror=()=>{ blockedEstimate++; updateStats(); };
+  document.body.appendChild(f);
+  setTimeout(()=>{ try{ document.body.removeChild(f);}catch(e){} },5000);
+}
 
-    let timer = null;
-    let attempted = 0;
-    let blockedEstimate = 0; // we estimate blocked by counting onerror for beacons
+function updateStats(){
+  attemptedEl.textContent=attempted.toLocaleString();
+  blockedEl.textContent=blockedEstimate.toLocaleString();
+}
 
-    function log(line){
-      const t = new Date().toLocaleTimeString();
-      logEl.textContent += `[${t}] ${line}\n`;
-      logEl.scrollTop = logEl.scrollHeight;
+function fireBurst(){
+  const burstSize=parseInt(burst.value,10);
+  const repeats=parseInt(mult.value,10);
+  for(let i=0;i<burstSize;i++){
+    const base=endpoints[(Math.random()*endpoints.length)|0];
+    for(let r=0;r<repeats;r++){
+      const pick=base;
+      const method=Math.random();
+      attempted++;
+      if(method<0.6) addImageBeacon(pick);
+      else if(method<0.85) addScriptTag(pick);
+      else{ if(iframesToggle.checked) addTinyIframe(pick); else addImageBeacon(pick);}
     }
+  }
+  updateStats();
+}
 
-    function cacheBust(url){
-      const u = new URL(url);
-      u.searchParams.set('cb', Math.random().toString(36).slice(2));
-      u.searchParams.set('t', Date.now());
-      return u.toString();
-    }
+function start(){
+  if(timer) return;
+  startBtn.disabled=true; stopBtn.disabled=false;
+  log('Starting stress test…');
+  timer=setInterval(fireBurst,120);
+}
 
-    function addImageBeacon(url){
-      const img = new Image();
-      img.referrerPolicy = 'no-referrer';
-      img.decoding = 'async';
-      img.loading = 'eager';
-      img.onerror = () => { blockedEstimate++; updateStats(); };
-      img.onload = () => { updateStats(); };
-      img.src = cacheBust(url);
-    }
+function stop(){
+  if(!timer) return;
+  clearInterval(timer); timer=null;
+  startBtn.disabled=false; stopBtn.disabled=true;
+  log('Stopped.');
+}
 
-    function addScriptTag(url){
-      const s = document.createElement('script');
-      s.async = true; s.defer = true; s.src = cacheBust(url);
-      s.onerror = () => { blockedEstimate++; updateStats(); };
-      document.body.appendChild(s);
-    }
+startBtn.addEventListener('click',start);
+stopBtn.addEventListener('click',stop);
+clearBtn.addEventListener('click',()=>{ logEl.textContent=''; attempted=0; blockedEstimate=0; updateStats(); });
 
-    function addTinyIframe(url){
-      const f = document.createElement('iframe');
-      f.width = 1; f.height = 1; f.style.position='absolute'; f.style.left='-9999px'; f.style.top='-9999px';
-      f.referrerPolicy = 'no-referrer';
-      f.src = cacheBust(url);
-      f.onerror = () => { blockedEstimate++; updateStats(); };
-      document.body.appendChild(f);
-    }
+// ------------------- One-shot -------------------
+let oneShotInterval=null;
+let oneShotTotal=1000;
 
-    function updateStats(){
-      attemptedEl.textContent = attempted.toLocaleString();
-      blockedEl.textContent = blockedEstimate.toLocaleString();
-    }
+oneShotList.addEventListener('click',()=>{
+  oneShotOptions.style.display=(oneShotOptions.style.display==='block')?'none':'block';
+});
 
-    function fireBurst(){
-      const burstSize = parseInt(burst.value, 10);
-      const repeats = parseInt(mult.value, 10);
-      for(let i=0;i<burstSize;i++){
-        const base = endpoints[(Math.random()*endpoints.length)|0];
-        for(let r=0;r<repeats;r++){
-          const pick = base; // different cache-busters make them unique
-          // randomize method to diversify
-          const method = Math.random();
-          attempted++;
-          if(method < 0.6){
-            addImageBeacon(pick);
-          } else if (method < 0.85){
-            addScriptTag(pick);
-          } else {
-            if(iframesToggle.checked) addTinyIframe(pick);
-            else addImageBeacon(pick);
-          }
-        }
-      }
-      updateStats();
-    }
+oneShotOptions.querySelectorAll('div').forEach(div=>{
+  div.addEventListener('click',()=>{
+    oneShotTotal=parseInt(div.dataset.val,10);
+    oneShotList.textContent=div.textContent+' ▼';
+    oneShotOptions.style.display='none';
+  });
+});
 
-    function start(){
-      if(timer) return;
-      startBtn.disabled = true; stopBtn.disabled = false;
-      log('Starting stress test…');
-      // Vary interval slightly to avoid being perfectly periodic
-      timer = setInterval(()=>{
-        fireBurst();
-      }, 120);
-    }
+function chooseMethodAndFire(){
+  const base=endpoints[(Math.random()*endpoints.length)|0];
+  const method=Math.random();
+  attempted++;
+  if(method<0.6) addImageBeacon(base);
+  else if(method<0.85) addScriptTag(base);
+  else{ if(iframesToggle.checked) addTinyIframe(base); else addImageBeacon(base);}
+  updateStats();
+}
 
-    function stop(){
-      if(!timer) return;
-      clearInterval(timer); timer = null;
-      startBtn.disabled = false; stopBtn.disabled = true;
-      log('Stopped.');
-    }
+function sendOneShot(n){
+  oneShotBtn.disabled=true; oneShotStopBtn.disabled=false;
+  oneShotStatus.textContent=`Sending ${n.toLocaleString()}...`;
+  oneShotBar.style.width='0%';
+  const batch=7500; let sent=0;
+  oneShotInterval=setInterval(()=>{
+    if(sent>=n){ clearInterval(oneShotInterval); oneShotStatus.textContent='Done'; oneShotBar.style.width='100%';
+      oneShotBtn.disabled=false; oneShotStopBtn.disabled=true; return;}
+    const toSend=Math.min(batch,n-sent);
+    for(let i=0;i<toSend;i++) chooseMethodAndFire();
+    sent+=toSend;
+    oneShotBar.style.width=Math.floor((sent/n)*100)+'%';
+    oneShotStatus.textContent=`Sending ${n.toLocaleString()} — ${Math.floor((sent/n)*100)}%`;
+  },50);
+}
 
-    startBtn.addEventListener('click', start);
-    stopBtn.addEventListener('click', stop);
-    clearBtn.addEventListener('click', ()=>{ logEl.textContent=''; attempted=0; blockedEstimate=0; updateStats(); });
-
-    // Safety: stop when tab is hidden for a while
-    let hiddenSince = 0;
-    document.addEventListener('visibilitychange', ()=>{
-      if(document.hidden){ hiddenSince = Date.now(); }
-      else if(hiddenSince && Date.now()-hiddenSince>120000){ stop(); log('Auto-stopped after being in background.'); hiddenSince = 0; }
-    });
-  </script>
+oneShotBtn.addEventListener('click',()=>sendOneShot(oneShotTotal));
+oneShotStopBtn.addEventListener('click',()=>{
+  clearInterval(oneShotInterval);
+  oneShotStatus.textContent='Stopped';
+  oneShotBtn.disabled=false; oneShotStopBtn.disabled=true;
+});
+</script>
 </body>
 </html>
